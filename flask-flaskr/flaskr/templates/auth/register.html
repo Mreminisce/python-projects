@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+<!--
+    一个实用的模式是把 { block title } 放在 { block header } 内部。
+    这样不但可以设置 title 块，还可以把其值作为 header 块的内容， 一举两得。
+-->
+{% block header %}
+    <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock header %}
+
+{% block content %}
+    <form method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <input type="submit" value="Register">
+    </form>
+{% endblock content %}

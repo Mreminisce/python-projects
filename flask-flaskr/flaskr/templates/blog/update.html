@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>
+        {% block title %}
+            Edit "{{ post['title'] }}"
+        {% endblock title %}
+    </h1>
+{% endblock header %}
+
+{% block content %}
+    <form method="POST">
+        <!--
+            request 也是一个在模板中自动可用的变量。
+            参数 { request.form['title'] or post['title'] } 用于判断在表单中显示的数据。
+            如果表单未提交就显示原 post 数据。
+            如果提交的是非法数据，并且需要显示这些数据以便用户修改的话就显示 request.form 中的数据。            
+        -->
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
+        <label for="body">Body</label>
+        <textarea name="body" id="body" cols="30" rows="10">
+            {{ request.form['body'] or post['body'] }}
+        </textarea>
+        <input type="submit" value="Save">
+    </form>
+    <hr>
+    <form action="{{ url_for('blog.delete', id=post['id']) }}" method="POST">
+        <input type="submit" class="danger" value="Delete" onclick="return confirm('Are you sure ?');">
+    </form>
+{% endblock content %}
