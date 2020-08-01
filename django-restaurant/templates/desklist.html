@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Desks List
+{% endblock title %}
+
+{% block content %}
+    <h1 align='center'>Desk List</h1>
+    {% for desk in desks %}
+        <li align='center'>{{ desk.deskname }}--{{ desk.location }}--{{ desk.price }}$</li>
+        {% if user.is_superuser %}
+            <li align='center'>
+                <a href="{% url 'order:deletedesk' desk.id %}" >Delete Desk .</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if user.is_superuser %}
+        <h1 align='center'>New Desk</h1>
+        <form method="post" class="mb-4" action="{% url 'order:newdesk' %}" 
+              enctype="multipart/form-data" align='center'
+        >
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="deskname">Desk Name</label>
+                <input  type="text" name="deskname" id="deskname" >
+            </div> 
+            <div class="form-group">
+                <label for="location">Desk Location</label>
+                <input  type="text" name="location" id="location" >
+            </div> 
+            <div class="form-group">
+                <label for="price">Desk Price</label>
+                <input  type="text" name="price" id="price" >
+            </div> 
+            <button type="submit" class="btn btn-success">Add Desk</button>
+        </form>
+    {% endif %}
+{% endblock content %}
+    

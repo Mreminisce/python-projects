@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block content %}
+    {% if user.username %}
+        <h1 align='center'>Hello {{ user.username }} !</h1>
+    {% else %}
+        <h1 align='center'>Hello Everyone !</h1>
+    {% endif %}
+
+    {% if user.is_superuser %}
+        <h1 align='center'>Welcome Back Superuser !</h1>
+        <div align='center'>
+            <li><a href="{% url 'order:meallist' %}">Manage Meals</a></li>
+            <li><a href="{% url 'order:desklist' %}">Manage Desks</a></li>
+            <li><a href="{% url 'order:orderlist' %}">Manage Orders</a></li>
+        </div>
+        <br>
+        <hr>
+        <br>
+    {% else %}
+        <h1 align='center'>Welcome To Our Restaurant !</h1>
+    {% endif %}
+
+    <div align='center'>
+    <li><a href="{% url 'customer:signup' %}">Singup To Join Us</a></li>
+    <li><a href="{% url 'customer:login' %}">Login To Start Order</a></li>
+    <li><a href="{% url 'order:meallist' %}">View Our Meal List</a></li>
+    <li><a href="{% url 'order:desklist' %}">View Our Desk List</a></li>
+    <li><a href="{% url 'order:neworder' %}">Initialize A New Order</a></li>
+    </div> 
+{% endblock content %}

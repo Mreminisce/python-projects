@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Meals List
+{% endblock title %}
+
+{% block content %}
+    <h1 align='center'>Meal List</h1>
+    {% for meal in meals %}
+        <li align='center'>{{ meal.mealname }}--{{ meal.price }}$</li>
+        {% if user.is_superuser %}
+            <li align='center'>
+                <a href="{% url 'order:deletemeal' meal.id %}" >Delete Meal .</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if user.is_superuser %}
+        <h1 align='center'>New Meal</h1>
+        <form method="post" class="mb-4" action="{% url 'order:newmeal' %}"
+              enctype="multipart/form-data" align='center'
+        >
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="mealname">Meal Name</label>
+                <input  type="text" name="mealname" id="mealname" >
+            </div> 
+            <div class="form-group">
+                <label for="price">Meal Price</label>
+                <input  type="text" name="price" id="price" >
+            </div> 
+            <button type="submit" class="btn btn-success">Add Meal</button>
+        </form>
+    {% endif %}
+{% endblock content %}
+    

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock title %} </title>
+</head>
+<body>
+    <div align='center'>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'customer:signup' %}">Singup</a>
+        <a href="{% url 'customer:login' %}">Login</a>
+        <a href="{% url 'customer:logout' %}">Logout</a>
+    </div>
+    {% block content %}
+      
+    {% endblock content %}   
+</body>
+</html>

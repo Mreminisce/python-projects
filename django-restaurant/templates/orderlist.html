@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Orders List
+{% endblock title %}
+
+{% block content %}
+    <h1 align='center'>Orders List</h1>
+    {% for order in orders %}
+        <li align='center'>{{ order.orderer }}--{{ order.desk }}----{{ order.sumprice }}$</li>
+        <li align='center'>
+            <a href="{% url 'order:deleteorder' order.id %}" >Order Processed··(Delete) .</a>
+        </li>
+    {% endfor %}
+{% endblock content %}

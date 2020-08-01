@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+    New Order
+{% endblock title %}
+
+{% block content %}
+    <h1 align='center'>Initialize A New Order</h1>
+    <h1 align='center'>Then Waiting For Your Cuisines</h1>
+    <form method="POST" action="." enctype="multipart/form-data" align='center'>
+        {% csrf_token %}       
+        <div class="form-group">
+            <label for="desk">Choose A Desk</label>
+            <select class="form-control  col-4" id="desk" name="desk">
+                <option value="none">Please Choose A Desk...</option>
+                {% for desk in desks %}
+                    <option value="{{ desk.id }}">{{ desk }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+            <label for="meal">Choose Meals</label>
+            <select class="form-control  col-4" id="meal" name="meal" multiple size="10">
+                {% for meal in meals %}
+                    <option value="{{ meal.id }}">{{ meal.id }}--{{ meal }}</option>
+                {% endfor %}
+            </select>
+        </div>   
+        <br>
+        <button type="submit" class="btn btn-primary">Send Order .</button>
+    </form>
+{% endblock content %}
