@@ -1,0 +1,26 @@
+from django.test import TestCase
+from django.utils import timezone
+import datetime
+
+from .models import Question
+
+# Create your tests here.
+class QuestionMethodTest(TestCase):
+    def test_was_published_recently_with_future_question(self):
+        # 如果问题发布在将来返回False
+        time = timezone.now() + datetime.timedelta(days=30)
+        future_question = Question(pub_date=time)
+        self.assertIs(future_question.was_published_recently(), False)
+        # assertIs() 检查was_published_recently()的输出结果
+
+    def test_was_published_recently_with_old_question(self):
+        # 如果问题发布超过1天返回False
+        time = timezone.now() - datetime.timedelta(days=1, seconds=1)
+        old_question = Question(pub_date=time)
+        self.assertIs(old_question.was_published_recently(), False)
+
+    def test_was_published_recently_with_recent_question(self):
+        # 如果问题是最近一天发布的，返回True
+        time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        recent_question = Question(pub_date=time)
+        self.assertIs(recent_question.was_published_recently(), True)

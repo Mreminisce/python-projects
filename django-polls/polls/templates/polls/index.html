@@ -1,0 +1,22 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}" type="text/css">
+
+{% if latest_question_list %}
+  <ul>
+      {% for question in latest_question_list %}
+        <li>
+            <a href="{% url 'polls:detail' question.id %}">
+                {{ question.question_text }}
+            </a>
+        </li>
+      {% endfor %}
+  </ul>
+{% else %}
+  <p>No polls are available.</p>
+{% endif %}
+
+{% comment %}
+  {% url 'polls:detail' question.id %}
+  由于添加了命名空间，所以将 detail 改为 polls:detail ，question.id传递参数
+{% endcomment %}

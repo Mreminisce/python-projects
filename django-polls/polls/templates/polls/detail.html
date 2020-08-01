@@ -1,0 +1,25 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}" type="text/css">
+
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}
+  <p>
+      <strong>{{ error_message }}</strong>
+  </p>
+{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="POST">
+    {% csrf_token %} 
+    {% for choice in question.choice_set.all %}
+      <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+      <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+    <input type="submit" value="Vote">
+</form>
+
+{% comment %}
+  {% csrf_token %}：防止发生 CSRF 跨站请求伪造 
+  forloop.counter：一般用来给循环项目添加有序数标，表示当前循环的次数。
+{% endcomment %}
