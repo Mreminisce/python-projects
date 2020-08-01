@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+<!-- 
+    render_form 是 Bootstrap-flask 库中用来快速渲染整个表单的宏
+    可以自动渲染 CSRF 令牌、错误消息和表单验证状态等内容
+    另外还有 render_field、render_pager、render_pagination 等其他宏
+-->
+
+{% block content %}
+    <div class="hello-form">
+        {{ render_form(form, action=request.full_path) }}
+    </div>
+    <h5>{{ messages|length }} messages
+        <small class="float-right">
+            <a href="#bottom" title="Go Bottom">&darr;</a>
+        </small>
+    </h5>
+    <div class="list-group">
+        {% for message in messages %}
+            <a class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">{{ message.name }}
+                        <!-- loop.revindex 反向记号标记 -->
+                        <small class="text-muted"> #{{ loop.revindex }}</small>
+                    </h5>
+                    <small data-toggle="tooltip" data-placement="top"
+                           data-timestamp="{{ message.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
+                           data-delay="500">
+                        <!-- strftime() 格式化时间,fromNow 输出相对时间，refresh 设置自动刷新时间 -->
+                        {{ moment(message.timestamp).fromNow(refresh=True) }}
+                    </small>
+                </div>
+                <p class="mb-1">{{ message.body }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
