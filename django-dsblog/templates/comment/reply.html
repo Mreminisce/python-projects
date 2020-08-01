@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!-- 提供一个 ckeditor 的编辑器 -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+
+<body>
+    <form action="." method="POST" id="reply_form">
+        {% csrf_token %}
+        <div class="form-group">
+            <div id="test">
+                {{ comment_form.media }}
+                {{ comment_form.body }}
+            </div>
+        </div>
+    </form>
+    <!-- 提交按钮 -->
+    <button onclick="confirm_submit({{ article_id }}, {{ parent_comment_id }})" class="btn btn-primary">
+        发送
+    </button>
+
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'popper/popper.min.js' %}"></script>    
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- csrf token -->
+    <script src="{% static 'csrf/csrf.js' %}"></script>
+
+    <script>
+    $(function(){
+        $(".django-ckeditor-widget").removeAttr('style');
+    });
+
+    function confirm_submit(article_id, comment_id){
+        // 从 ckeditor 中取值，CKEDITOR 是编辑器提供的全局变量
+        let content = CKEDITOR.instances['id_body'].getData();
+        // 调用 ajax 与后端交换数据
+        $.ajax({
+            url: '/comment/post-comment/' + article_id + '/' + comment_id,
+            type: 'POST',
+            data: {body: content},
+            // ajax 的回调函数，当得到视图的响应后执行内部的函数
+            success: function(e){
+                if(e.code === '200 OK'){
+                // e.code 获取视图返回的状态，调用父页面的函数
+                parent.post_reply_and_show_it(e.new_comment_id);
+            };
+            }
+            // 二级评论提交成功后就调用 reload() 方法刷新当前文章所在的页面，实现数据的更新
+        })
+    }
+    </script>
+</body>
+</html>

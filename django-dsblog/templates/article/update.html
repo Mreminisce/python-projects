@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+  更新文章
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <br>
+                <form method="POST" action="." enctype="multipart/form-data">
+                <!-- enctype 设置表单提交时不对字符进行编码，如果表单带有文件项一定要加上这个属性-->
+                    {% csrf_token %}
+
+                    <!-- 文章标题图 -->
+                    <div class="form-group">
+                        <label for="avatar">标题图</label>
+                        <input type="file" class="form-control-file" name="avatar" id="avatar">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">文章标题</label>
+                        <input type="text" class="form-control" name="title" id="title" value="{{ article.title }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="column">分类</label>
+                        <select class="form-control col-4" id="column" name="column">
+                            <option value="none">请选择分类..</option>
+                            {% for column in columns %}
+                            <!-- 如果 column.id 和 article.column.id 相等则将其设置为默认值-->
+                                <option value="{{ column.id }}"
+                                    {% if column.id == article.column.id %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ column }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- 文章标签，添加标签必须使用英文逗号 -->
+                    <div class="form-group">
+                        <label for="tags">标签</label>
+                        <input type="text" class="form-control col-4" id="tags" name="tags" value="{{ tags }}" placeholder="多个标签使用英文逗号 , 分隔">
+                    </div>
+                    <div class="form-group">
+                        <label for="body">文章正文</label>
+                        <textarea name="body" id="body" rows="12" class="form-control">{{ article.body }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">完成</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

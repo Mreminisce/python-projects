@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+  写文章
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <br>
+                <form method="POST" action="." enctype="multipart/form-data">
+                <!-- action="." 指定表单提交的地址默认为当前url -->
+                    {% csrf_token %}
+                    <!-- 网络安全相关的中间件验证，页面中需要 POST 数据的地方都必须要有这个标签 -->
+
+                    <!-- 文章标题图 -->
+                    <div class="form-group">
+                        <label for="avatar">标题图</label>
+                        <input type="file" class="form-control-file" name="avatar" id="avatar">
+                    </div>
+                    <!-- 文章标题 -->
+                    <div class="form-group">
+                        <label for="title">文章标题</label>
+                        <input type="text" name="title" id="title" class="form-control">
+                    </div> <!-- name 属性必须与表单类中的字段名称对应 -->
+                    <!-- 文章分类 -->
+                    <div class="form-group">
+                        <label for="column">分类</label>
+                        <select class="form-control  col-4" id="column" name="column">
+                            <option value="none">请选择分类..</option>
+                            {% for column in columns %}
+                            <option value="{{ column.id }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- 文章标签，添加标签必须使用英文逗号。placeholder 设置文本框默认值 -->
+                    <div class="form-group">
+                        <label for="tags">标签</label>
+                        <input type="text" class="form-control col-4" id="tags" name="tags" placeholder="多个标签使用英文逗号 , 分隔">
+                    </div>
+                    <!-- 文章正文 -->
+                    <div class="form-group">
+                        <label for="body">文章正文</label>
+                        <textarea class="form-control" name="body" id="body" rows="12"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">完成</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,96 @@
+<!-- 引入notifications的模板标签 -->
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        
+        <!-- 导航栏商标 -->
+        <a class="navbar-brand" href="{% url 'article:article_list' %}">
+            <i class="fas fa-cloud-sun-rain" style="color: white;"></i>
+            &nbsp;&nbsp;我的博客
+        </a>
+        <!-- 导航入口 -->
+        <div>
+            <ul class="navbar-nav">
+                <!-- 条目 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'article:article_list' %}">阅读</a>
+                    <!--
+                    url 标签是模板解耦语法，可以根据在 urls.py 中的设置反向解析到对应的URL;
+                    article: 在项目app的 urls.py 中定义的 app_name 值
+                    article_list: 在 app 目录 urls.py 中定义的具体的路由地址 path 的 name 参数值
+                    -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'article:article_create' %}">创作</a>
+                </li>
+                {% if user.is_authenticated %} <!--  -->
+                <!--
+                    is_authenticated 是 models.User 的类方法，用于判断用户是否已通过身份验证，
+                    如果用户已经登录就显示用户名下拉框
+                -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        
+                        <!-- 小红点 -->
+                        {% if unread_count %}
+                        <svg viewBox="0 0 8 8" width="8px" height="8px">
+                            <circle cx="4" cy="4" r="4" fill="#ff6b6b"></circle>
+                        </svg>
+                        {% endif %}
+
+                        {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!-- unread_count 是当前用户未读通知的计数 -->
+                        <a class="dropdown-item" href="{% url 'notice:list' %}">通知
+                            {% if unread_count %}
+                                <span class="badge badge-danger">{{ unread_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'userprofile:edit' user.id %}">修改个人信息</a>
+                        <a class="dropdown-item" href="#" onclick="user_delete()">删除账户</a>
+                        <a class="dropdown-item" href="{% url 'userprofile:logout' %}">退出登录</a>
+                    </div>
+                </li>
+                {% else %} <!-- 如果用户未登录，则显示 “登录” 提醒用户点击登录-->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'userprofile:login' %}">登录</a>
+                  </li>
+                {% endif %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'userprofile:register' %}">注册</a>
+                  </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% if user.is_authenticated %} 
+<!-- 用户未登录时页面对象中没有 user.id 属性，if 语句确保只有在用户登录时才对这段代码进行解析 -->
+  <form 
+      style="display: none;"
+      id="user_delete"
+      action="{% url 'userprofile:delete' user.id %}"
+      method="POST"
+  >
+  {% csrf_token %}
+  <button type="submit">发送</button>
+  </form>
+  <script>
+  // 在 base.html 中已经引用了 layer 弹窗组件模块，而 header.html 拼接在 base.html中，
+  // 因此就不用再重复引用弹窗组件了
+      function user_delete() {
+          layer.open({
+              title: '确认删除',
+              content: '确认删除用户资料吗？',
+              yes: function(index, layero) {
+                  $('form#user_delete button').click();
+                  layer.close(index);
+              },
+          })
+      }
+  </script>
+{% endif %}

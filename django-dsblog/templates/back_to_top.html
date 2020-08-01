@@ -1,0 +1,64 @@
+<button type="button" id="BackTop" class="toTop-arrow" style="z-index: 100;"></button>
+
+<script>
+    // 向上滚动的函数
+    $(function () {
+        $('#BackTop').click(function () {
+            $('html,body').animate({scrollTop: 0}, 200);
+        });
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('#BackTop').fadeIn(300);
+            } else {
+                $('#BackTop').stop().fadeOut(300);
+            }
+        }).scroll();
+    });
+    // 主要用到了 Jquery 的语法，页面加载完成后开始监听两个事件：
+    // 1.当用户点击浮动按钮时将页面滚动到顶部
+    // 2.当页面滚动时根据页面距离顶部的距离决定按钮显示或隐藏
+</script>
+
+<style>
+    /* 按钮边框的大小、位置、样式 */
+    .toTop-arrow {
+        width: 3.5rem;
+        height: 3.5rem;
+        padding: 0;
+        margin: 0;
+        border: 0.5;
+        border-radius: 100%;
+        opacity: 0.7;
+        background: white;
+        cursor: pointer;
+        position: fixed;
+        right: 3.5rem;
+        bottom: 3.5rem;
+        display: none;
+    }
+
+    /* 绘制按钮中的向上箭头 */
+    .toTop-arrow::before, .toTop-arrow::after {
+        width: 31px;
+        height: 5px;
+        border-radius: 3px;
+        background: green;
+        position: absolute;
+        content: "";
+    }
+
+    .toTop-arrow::before {
+        transform: rotate(-60deg) translate(0, -50%);
+        left: 0.4rem;
+    }
+
+    .toTop-arrow::after {
+        transform: rotate(60deg) translate(0, -50%);
+        right: 0.4rem;
+    }
+
+    /* 取消点击按钮时的聚焦 */
+    .toTop-arrow:focus {
+        outline: none;
+    }
+</style>

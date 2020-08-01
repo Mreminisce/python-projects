@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!-- 加上 {% load staticfiles %} 后才可以使用 {% static 'path' %} 引用静态文件 -->
+
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'md_css/monokai.css' %}">
+    <link rel="stylesheet" 
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" 
+      crossorigin="anonymous">
+    <!-- 必须联网 -->
+</head>
+<body>
+    {% include "header.html" %}
+
+    <div id="wrapper">
+        {% block content %}{% endblock content %}
+        <div id="push"></div>
+    </div>
+
+    {% include "footer.html" %}
+
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'popper/popper.min.js' %}"></script>    
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'layer/layer.js' %}"></script>
+    <!-- layer 弹窗组件必须依赖 jquery 才能正常工作，因此在 jquery 之后引入 -->
+
+    {% block script %}{% endblock script %}
+    <!-- 
+        用 block script 标签来专门拼接 JavaScript 脚本的位置，可以灵活的定义 JavaScript 代码
+        的运行顺序并且让代码更整洁，建议所有的 JavaScript 代码都采取这种方法插入
+    -->
+
+    {% include 'back_to_top.html' %}
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        /* 设置负边距，给页脚容器让出位置 */
+        #wrapper {
+            min-height: 100%;
+            margin-bottom: -60px;
+        }
+        /* push 给容器留出一段与页脚等高的空隙，避免正文内容与页脚重叠*/
+        #footer,
+        #push {
+            height: 40px;
+        }
+    </style>
+    <!-- 解决页脚沉底 -->
+</body>
+</html>
